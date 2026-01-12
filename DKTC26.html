@@ -1,0 +1,629 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.1" />
+
+<title>Dordtsche Kil Tide Calculator</title>
+		
+<style type="text/css">
+
+*{ padding:0; margin:0; border:0; font-family: Arial, Helvetica, Sans-serif; font-weight: normal; color:MidnightBlue; }
+
+.Box { width:300px; margin:10px; background-color:WhiteSmoke; border:1px solid MidnightBlue; }
+
+.TitleDiv { text-align: center; width:100%; font-size:18px; padding:5px; color:OrangeRed; }
+
+.ImageDiv { padding-left:5px; padding-right:5px;}
+
+.DayDiv{
+width:100%;
+text-align: center;
+font-family:Comic Sans MS;
+font-size: 22px;
+padding-top:20px;
+padding-bottom:5px;
+cursor: pointer;
+}
+
+.DatumDiv{
+width:100%;
+text-align: center;
+font-family:Comic Sans MS;
+font-size: 22px;
+padding-top:5px;
+padding-bottom:15px;
+cursor: pointer;
+}
+
+.Table { display: table; width:100%; }
+
+.Row{ display: table-row; }
+
+.ArrowDiv {
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+font-family:Comic Sans MS;
+font-size: 40px;
+font-weight: bold;
+width:25%;
+}
+
+.TimeDiv {
+display: table-cell;
+height:35px;
+text-align: center;
+vertical-align: middle;
+padding:20px;
+font-size: 22px;
+}
+
+.ClickDiv {
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+font-size: 15px;
+padding:15px;
+cursor: pointer;
+width:100%;
+}
+
+.BtnClass {
+background-color: LightGrey; 
+cursor: pointer;
+border-radius: 5px;
+font-size: 15px;
+color: Black;
+padding: 5px 5px;
+height:30px;
+width:75px;
+}
+
+#HW { display: none; }
+
+</style>
+
+
+</head>
+
+<body>
+
+<div class="Box">
+
+    <div class="TitleDiv">Dordtsche Kil Tide Calculator</div>
+    <div class="DayDiv" id="DagvdWeek" onClick="ShowDatePicker()" >Dag van de week</div>
+    <div class="DatumDiv" id="Datum" onClick="ShowDatePicker()" >1 januari 2025</div>
+
+    <div class="Table">
+
+        <div class="Row">
+            <div class="ArrowDiv" id="L0"></div>
+            <div class="TimeDiv" id="T0">00000</div>
+            <div class="ArrowDiv" id="R0" ></div>
+        </div>
+
+        <div class="Row">
+            <div class="ArrowDiv" id="L1"  ></div>
+            <div class="TimeDiv" id="T1">00000</div>
+            <div class="ArrowDiv" id="R1" ></div>
+        </div>
+
+        <div class="Row">
+            <div class="ArrowDiv" id="L2"  ></div>
+            <div class="TimeDiv" id="T2">00000</div>
+            <div class="ArrowDiv" id="R2"  ></div>
+        </div>
+
+        <div class="Row">
+            <div class="ArrowDiv" id="L3"  ></div>
+            <div class="TimeDiv" id="T3">00000</div>
+            <div class="ArrowDiv" id="R3"  ></div>
+        </div>
+
+        <div class="Row">
+            <div class="ClickDiv" > <button class="BtnClass" type="button" onclick="DateChangeClicked('Previous')">Previous</button> </div>
+            <div class="ClickDiv" ></div>
+            <div class="ClickDiv" > <button class="BtnClass" type="button" onclick="DateChangeClicked('Next')">Next</button> </div>
+        </div>
+
+    </div>
+
+
+<div id="HW">202601010017202601011242202601020114202601021336202601030207202601031425202601040256202601041513202601050343202601051559202601060429202601061645202601070515202601071732202601080600202601081821202601090647202601091912202601100735202601102007202601110826202601112103202601120923202601122205202601131031202601132327202601141146202601150031202601151246202601160123202601161335202601170207202601171416202601180242202601181452202601190314202601191526202601200347202601201601202601210422202601211636202601220458202601221713202601230535202601231751202601240613202601241834202601250656202601251923202601260746202601262021202601270848202601272131202601281002202601282245202601291119202601300003202601301229202601310108202601311328202602010202202602011417202602020249202602021502202602030332202602031545202602040413202602041627202602050453202602051710202602060533202602061752202602070612202602071834202602080653202602081919202602090738202602092006202602100830202602102100202602110932202602112202202602121048202602122356202602131217202602140101202602141316202602150147202602151358202602160223202602161432202602170254202602171505202602180326202602181538202602190400202602191614202602200435202602201651202602210512202602211730202602220550202602221811202602230632202602231858202602240719202602241953202602250818202602252103202602260939202602262231202602271110202602280001202602281226202603010105202603011322202603020154202603021408202603030236202603031448202603040314202603041527202603050351202603051606202603060428202603061644202603070504202603071722202603080539202603081758202603090615202603091833202603100652202603101909202603110736202603111955202603120844202603122107202603131005202603132230202603141140202603150027202603151247202603160115202603161330202603170152202603171403202603180223202603181436202603190257202603191511202603200332202603201548202603210409202603211626202603220447202603221707202603230526202603231749202603240609202603241836202603250657202603251931202603260758202603262049202603270934202603272231202603281109202603282354202603291320202603300151202603301410202603310237202603311451202604010316202604011529202604020352202604021606202604030427202604031643202604040501202604041718202604050535202604051753202604060609202604061825202604070642202604071856202604080716202604081928202604090752202604092006202604100840202604102108202604111030202604112248202604121152202604130022202604131304202604140130202604141350202604150211202604151428202604160248202604161504202604170325202604171542202604180403202604181622202604190442202604191703202604200523202604201746202604210605202604211830202604220650202604221919202604230741202604232020202604240851202604242149202604251031202604252318202604261155202604270031202604271259202604280125202604281347202604290210202604291428202604300251202604301507202605010328202605011545202605020402202605021620202605030436202605031654202605040510202605041727202605050544202605051759202605060617202605061830202605070651202605071904202605080727202605081944202605090813202605092041202605100946202605102210202605111104202605112325202605121209202605130034202605131304202605140127202605141350202605150212202605151433202605160254202605161516202605170337202605171559202605180420202605181644202605190503202605191729202605200549202605201817202605210637202605211910202605220732202605222015202605230847202605232131202605241008202605242244202605251122202605252354202605261226202605270050202605271317202605280139202605281403202605290223202605291446202605300303202605301525202605310340202605311602202606010414202606011635202606020449202606021708202606030524202606031741202606040559202606041814202606050634202606051850202606060711202606061931202606070755202606072021202606080853202606082127202606091013202606092239202606101118202606102344202606111218202606120045202606121314202606130139202606131406202606140229202606141455202606150316202606151543202606160403202606161630202606170449202606171718202606180536202606181807202606190626202606191859202606200720202606201955202606210822202606212054202606220928202606222155202606231033202606232300202606241142202606250007202606251244202606260105202606261338202606270156202606271427202606280242202606281512202606290323202606291549202606300359202606301622202607010434202607011654202607020508202607021727202607030543202607031802202607040618202607041837202607050654202607051915202607060735202607061957202607070822202607072048202607080921202607082150202607091030202607092300202607101137202607110009202607111244202607120114202607121347202607130211202607131443202607140303202607141533202607150351202607151621202607160437202607161707202607170523202607171752202607180610202607181838202607190658202607191924202607200748202607202012202607210842202607212104202607220938202607222200202607231039202607232305202607241202202607250025202607251314202607260133202607261411202607270227202607271500202607280311202607281538202607290346202607291608202607300418202607301638202607310450202607311710202608010523202608011743202608020557202608021817202608030633202608031852202608040711202608041931202608050754202608052016202608060846202608062110202608070950202608072220202608081105202608082342202608091226202608100059202608101339202608110202202608111437202608120254202608121524202608130339202608131608202608140423202608141649202608150505202608151730202608160547202608161811202608170630202608171852202608180714202608181933202608190759202608192018202608200847202608202109202608210940202608212211202608221042202608222330202608231249202608240110202608241351202608250209202608251438202608260251202608261515202608270324202608271544202608280354202608281612202608290424202608291644202608300457202608301717202608310532202608311751202609010608202609011827202609020647202609021906202609030729202609031949202609040818202609042040202609050920202609052152202609061045202609062330202609071223202609080055202609081336202609090156202609091428202609100243202609101510202609110324202609111550202609120404202609121628202609130444202609131705202609140523202609141743202609150602202609151820202609160641202609161858202609170718202609171936202609180755202609182020202609190839202609192123202609200946202609202245202609211108202609220036202609221319202609230139202609231406202609240220202609241441202609250252202609251510202609260322202609261540202609270354202609271613202609280429202609281648202609290505202609291725202609300544202609301803202610010624202610011843202610020708202610021928202610030757202610032020202610040903202610042141202610051042202610052329202610061218202610070050202610071323202610080144202610081410202610090226202610091450202610100305202610101528202610110344202610111605202610120422202610121641202610130500202610131717202610140536202610141752202610150611202610151827202610160643202610161903202610170716202610171940202610180752202610182027202610190846202610192207202610201021202610202330202610211156202610220050202610221314202610230137202610231355202610240213202610241431202610250247202610251406202610260223202610261443202610270301202610271521202610280341202610281601202610290423202610291642202610300506202610301725202610310552202610311813202611010646202611011911202611020800202611022045202611030933202611032215202611041054202611042328202611051155202611060020202611061243202611070104202611071325202611080145202611081405202611090225202611091442202611100303202611101518202611110340202611111554202611120415202611121629202611130448202611131704202611140520202611141740202611150552202611151816202611160630202611161859202611170719202611172013202611180839202611182136202611190954202611192242202611201104202611202340202611211203202611220029202611221250202611230112202611231334202611240155202611241416202611250238202611251458202611260322202611261542202611270407202611271626202611280454202611281713202611290543202611291804202611300640202611301905202612010749202612012025202612020901202612022140202612031012202612032250202612041117202612042349202612051211202612060039202612061259202612070126202612071343202612080209202612081424202612090250202612091501202612100326202612101537202612110400202612111613202612120432202612121648202612130505202612131723202612140539202612141759202612150616202612151838202612160659202612161926202612170754202612172033202612180903202612182144202612191011202612192246202612201115202612202346202612211214202612220042202612221306202612230133202612231355202612240222202612241442202612250310202612251528202612260357202612261614202612270444202612271702202612280533202612281752202612290624202612291847202612300719202612301949202612310818202612312053</div>
+
+</div>
+	
+</body>
+
+<script type="text/javascript">
+
+var myStartDate = new Date() ;
+setData(  getStringTime( myStartDate ).substr(0,8) );
+
+
+
+
+/***
+* Deze Udf toont de gegevens van de TTP's die overeenkomen met de nieuwe datum als
+*  gevolg van het klikken op "Next" of "Previous".
+*/
+function DateChangeClicked(cType){
+
+// De datum die nu getoond wordt, ophalen als Date object.
+var myDate  = GetDateObjectFromLongDate( document.getElementById( "Datum" ).innerHTML )
+
+// Nieuwe datum bepalen.
+if ( cType == "Next" ) { myDate.setDate(myDate.getDate() + 1); }
+else{ myDate.setDate(myDate.getDate() - 1); }
+
+//De gegevens van de nieuwe datum tonen.
+setData(  getStringTime( myDate ).substr(0,8) )
+
+}
+
+
+/***
+* Deze Udf toont de gegevens van de TTP's die overeenkomen met de datum die we als parameter doorkrijgen.
+* De parameter heeft als formaat bijvoorbeeld "20150321".
+*/
+function setData( cDay ) {
+var myString = getTTPfromDay( cDay );
+var myArray = new Array();
+
+// Als we die datum niet vinden is het gedaan.
+if ( myString == -1 ) { 
+    alert ("Geen gegevens beschikbaar voor " + cDay) ;
+return;
+}
+
+// De referentie-dag van de week tonen.
+document.getElementById( "DagvdWeek" ).innerHTML = getLongDateWithDay(cDay)
+
+// De referentiedatum tonen.
+document.getElementById( "Datum" ).innerHTML = getLongDate(cDay)
+
+// Er zijn 3 of 4 TTP's per dag. Daarom moet de vierde lijn soms leeg blijven, maar er kunnen nog
+// gegevens op staan van de vorige dag. Die verwijderen we eerst. De gegevensrijen zijn zero based.
+document.getElementById("T3").innerHTML = "-" ;
+document.getElementById("L3").innerHTML = "" ;
+document.getElementById("R3").innerHTML = "" ;
+
+// De TTP's van in de string zetten we in een dynamische array.
+n = 0
+while (n <= myString.length - 14) {
+    myArray.push(myString.substr(n,14));
+    n += 14;
+}
+
+// In ieder element van de array staan de gegevens voor de betreffende rij op het scherm.
+for (var i = 0; i < myArray.length; i++) {
+    
+    // Tijdstip van het TTP tonen.
+    document.getElementById( "T" + i ).innerHTML = myArray[i].substr(8,2) + ":" + myArray[i].substr(10,2)  ;
+
+    // De pijlen in de juiste richting zetten. Als NZ het type van TTP is, moet de linkse pijl naar boven wijzen.
+    if ( myArray[i].substr(12,2) == "NZ" ) {
+
+        document.getElementById("L" + i).style.color = "DarkOrange"
+        document.getElementById("L" + i).innerHTML = "&#9650" ;
+        document.getElementById("R" + i).style.color = "Green"
+        document.getElementById("R" + i).innerHTML = "&#9660" ;
+
+    }
+    else {
+
+        document.getElementById("L" + i).style.color = "Green"
+        document.getElementById("L" + i).innerHTML = "&#9660" ;
+        document.getElementById("R" + i).style.color = "DarkOrange"
+        document.getElementById("R" + i).innerHTML = "&#9650" ;
+
+    }
+
+}
+
+}  // End of function setData()
+
+
+/***
+* Deze Udf geeft een string met de TTP's van de dag waarvan de datum als parameter wordt doorgegeven. Het formaat van zulke
+* datum is bijvoorbeeld "20140518". Het aantal TTP's per dag kan 3 of vier zijn, naargelang de hoogwatertijdstippen.
+*/
+function getTTPfromDay( cDay ) {
+var myString = "" ;
+
+// Eerst de datum opzoeken in de div met de hoogwatertijdstippen. De variabele n is de positie van het eerste voorkomen van de datum.
+var n = document.getElementById("HW").innerHTML.search(cDay);
+
+// Als we die datum niet vinden is het gedaan.
+if ( n == -1 ) { return -1}
+
+// Als de div met de hoogwatertijdstippen een vroegere datum bevat, zoeken we het laatste hoogwatertijdstip van die vroegere
+// datum op, want die kan een TTP geven die in de referentiedatum (parameter) ligt.
+if ( n >= 12 ) { myString += getTTPfromHW ( document.getElementById("HW").innerHTML.substr(n-12,12) ) ; }
+
+// Vervolgens halen we de TTP's op die in de referentiedatumdatum vallen. Er zijn twee hoogwatertijdstippen in een 24-uren dag.
+myString += getTTPfromHW ( document.getElementById("HW").innerHTML.substr(n,12) );
+myString += getTTPfromHW ( document.getElementById("HW").innerHTML.substr(n+12,12) );
+
+// myString bevat nu zes TTP's waaruit we alleen de TTP's nodig hebben die in de referentiedatumdatum vallen.
+// myString ziet er bijvoobeeld als volgt uit: "201412172344NZ201412180444ZN201412181219NZ201412181719ZN201412190056NZ201412190556ZN".
+
+// Eerst de overbodige TTP's vooraan verwijderen.
+while (myString.substr(0,8) !== cDay) { myString = myString.substr(14); }
+
+// Dan de overbodige TTP's achteraan verwijderen.
+while (myString.substr(myString.length-14,8) !== cDay) { myString = myString.substr(0, myString.length-14 ); }
+
+return myString;
+}
+
+
+/***
+* Deze Udf geeft een string met twee TTP's ("Tide Turning Point") verbonden aan het hoogwatertijdstip dat als parameter wordt doorgegeven.
+* Er zijn twee TTP's per hoogwatertijdstip: één van N naar Z op 0,5 uur na HW, en één van Z naar N op 5,5 uren na HW.
+* Het hoogwatertijdstip wordt als string parameter doorgegeven, bijvoorbeeld "201504281216".
+* De teruggeven string heeft als formaat bijvoorbeeld "201503250942NZ201503251325ZN".
+*/
+function getTTPfromHW ( cHW ) {
+var oHW = new Date() , oTTP = new Date() ;
+var myString = "" ;
+
+// Waarde van de doorgegeven parameter opslaan in het Date object van het hoogwatertijdstip.
+oHW.setFullYear (cHW.substr(0, 4) , cHW.substr(4, 2) - 1 , cHW.substr(6,2)) ;
+oHW.setHours (cHW.substr(8,2), cHW.substr(10, 2) ) ;
+
+// Eerste TTP berekenen en toevoegen aan de string.
+oTTP.setTime( oHW.getTime() + (0.5 * 3600000 ) ) ;
+myString = myString + getStringTime(oTTP) + "NZ" ;
+
+// Tweede TTP berekenen en toevoegen aan de string.
+oTTP.setTime( oHW.getTime() + (5.5 * 3600000 ) ) ;
+myString = myString + getStringTime(oTTP) + "ZN" ;
+
+return myString ;
+}
+
+
+/***
+* Deze Udf geeft een tijdstip als string aan de hand van het als parameter doorgegeven Date object.
+* Format = "202301191541"
+*/
+function getStringTime( oDate ) {
+var myString = "" ;
+var myTime = [ oDate.getFullYear() ,  oDate.getMonth() + 1 ,  oDate.getDate() ,  oDate.getHours() , oDate.getMinutes() ] ;
+for (var i in myTime) {
+    if ( i > 0 ) { if ( myTime[i] < 10 ) { myTime[i] = "0"+ myTime[i] } } ;
+    myString += myTime[i].toString() } ;
+return myString ;
+}
+
+
+/***
+* Deze Udf geeft een datum met voluit geschreven maand, op basis van de stringdatum (met 8 characters) die we als parameter doorkrijgen.
+*/
+function getLongDate( cDate ){
+var arr = ["januari","februari","maart","april","mei","juni","juli","augustus", "september","oktober","november","december"];
+return cDate.substr(6,2) + " " +  arr[ Number( cDate.substr(4,2) ) - 1 ]  + " " + cDate.substr(0,4);
+}
+
+
+/***
+* Deze Udf geeft de voluit geschreven dag, op basis van de stringdatum (met 8 characters) die we
+* als parameter doorkrijgen. Bijvoorbeeld "20230118".
+*/
+function getLongDateWithDay( cDate ){
+var myDate =  new Date (Number(cDate.substr(0,4)), Number(cDate.substr(4,2))-1, Number(cDate.substr(6,2)));
+var arr = ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"];
+return  arr[ myDate.getDay() ]  ;
+
+}
+
+
+/***
+* Deze Udf geeft een Date object op basis van een Long Date (bijvoorbeeld "07 april 2015").
+*/
+function GetDateObjectFromLongDate( cLongDate ){
+var myDate = new Date() ;
+var arr = ["jan","feb","maa","apr","mei","jun","jul","aug", "sep","okt","nov","dec"] ;
+var myArray = cLongDate.split(" ") ;;
+myArray[1] = arr.indexOf( myArray[1].substr(0,3)) ;
+myDate.setFullYear ( myArray[2] , myArray[1] , myArray[0] ) ;
+return myDate;
+}
+
+/*** De hiernavolgende code betreft de Date Picker ***/
+
+function ShowDatePicker(){
+
+// Als men meerdere keren op de div klikt, mag dat geen aanleiding geven tot meerdere Date Pickers.
+if(document.getElementById ("DatePickerBox")){return}
+
+CreateEmptyDatePicker();
+UpdateDatepicker();
+
+}
+
+
+/***
+* Deze Udf geeft een lege DatePicker.
+* Die bevat alle nodige Divs, behalve de Divs voor de dagen van de maand (1 ... 31). Die vullen we aan in een
+* aparte Udf omdat dit zowel bij creatie als bij wijziging van de referentiemaand moet gebeuren.
+*/
+function CreateEmptyDatePicker(){
+var myConDiv, myDiv, myElement, i
+
+// Aangezien deze functie als eerste in actie komt, initialiseren we hier enkele variabelen die we declareren
+// zonder het keyword "var", zodat ze een global scope krijgen.
+refDate = new Date()
+dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+
+// Globale container Div voor de Date Picker creëren.
+myConDiv = document.createElement ("div");
+myConDiv.id = "DatePickerBox";
+myConDiv.style.position = "absolute";
+myConDiv.style.top = "190px";
+myConDiv.style.left = "75px";
+myConDiv.style.width = "245px";
+myConDiv.style.fontFamily = "Tahoma, Arial, Helvetica, Sans-serif";
+myConDiv.style.fontSize = "14px";
+myConDiv.style.backgroundColor = "AliceBlue";
+myConDiv.style.borderTop = "1px solid Grey";
+myConDiv.style.borderLeft = "1px solid Grey";
+myConDiv.style.borderRight = "1px solid Grey";
+
+// De container Div voor de maand creëren, aanvullen met vier subDivs en aan de container Div van de Date Picker hangen.
+myDiv = document.createElement ("div");
+myDiv.style.clear = "both";
+myDiv.style.borderBottom = "1px solid Grey";
+myDiv.style.display = "table";
+myDiv.style.backgroundColor = "Green";
+
+myElement = document.createElement ("div");
+myElement.id = "PreviusBox";
+myElement.style.width = "30px";
+myElement.style.styleFloat = "left";   // For Internet Explorer.
+myElement.style.cssFloat = "left";   // For all other browsers.
+myElement.innerHTML = "<";
+myElement.style.textAlign = "center";
+myElement.style.verticalAlign = "middle";
+myElement.style.paddingBottom = "5px";
+myElement.style.paddingTop = "5px";
+myElement.style.color = "White";
+myElement.style.fontWeight = "bold";
+myElement.addEventListener ("mouseover", MouseOverNextOrPrevious, false);
+myElement.addEventListener ("mouseout", MouseOutNextOrPrevious, false);
+myElement.addEventListener ("click", OnPreviousClick, false);
+myDiv.appendChild (myElement);
+
+myElement = document.createElement ("div");
+myElement.id = "MonthBox";
+myElement.style.width = "150px";
+myElement.style.styleFloat = "left";
+myElement.style.cssFloat = "left";
+myElement.innerHTML = "december 2014";
+myElement.style.color = "White";
+myElement.style.textAlign = "center";
+myElement.style.paddingBottom = "5px";
+myElement.style.paddingTop = "5px";
+myDiv.appendChild (myElement);
+
+myElement = document.createElement ("div");
+myElement.id = "NextBox";
+myElement.style.width = "30px";
+myElement.style.styleFloat = "left";
+myElement.style.cssFloat = "left";
+myElement.innerHTML = ">";
+myElement.style.textAlign = "center";
+myElement.style.color = "White";
+myElement.style.paddingBottom = "5px";
+myElement.style.paddingTop = "5px";
+myElement.style.fontWeight = "bold";
+myElement.addEventListener ("mouseover", MouseOverNextOrPrevious, false);
+myElement.addEventListener ("mouseout", MouseOutNextOrPrevious, false);
+myElement.addEventListener ("click", OnNextClick, false);
+myDiv.appendChild (myElement);
+
+myElement = document.createElement ("div");
+myElement.id = "CloseBox";
+myElement.style.width = "35px";
+myElement.style.styleFloat = "left";
+myElement.style.cssFloat = "left";
+myElement.innerHTML = "x";
+myElement.style.textAlign = "center";
+myElement.style.color = "White";
+myElement.style.paddingBottom = "5px";
+myElement.style.paddingTop = "5px";
+myElement.style.fontWeight = "bold";
+myElement.addEventListener ("mouseover", MouseOverNextOrPrevious, false);
+myElement.addEventListener ("mouseout", MouseOutNextOrPrevious, false);
+myElement.addEventListener ("click", OnCloseClick, false);
+myDiv.appendChild (myElement);
+
+myConDiv.appendChild (myDiv);
+
+// De container Div voor de vermelding van de dagnamen creëren, aanvullen met een Div voor iedere dagnaam
+// en aan de container Div van de Date Picker hangen.
+myDiv = document.createElement ("div");
+myDiv.id = "DayNamesBox";
+myDiv.style.height = "20px";
+myDiv.style.clear = "both";
+for ( i=0; i < dayNames.length; i++) {
+    myElement = document.createElement ("div");
+    myElement.class = "DayNameBox";
+    myElement.style.styleFloat = "left";
+    myElement.style.cssFloat = "left";
+    myElement.style.width = "35px";
+    myElement.style.textAlign = "center";
+    myElement.innerHTML = dayNames[i];
+    myElement.style.color = "DarkRed";
+    myElement.style.paddingBottom = "4px";
+    myElement.style.paddingTop = "4px";
+    myDiv.appendChild (myElement);
+}
+myConDiv.appendChild (myDiv);
+
+// De container Div voor de dagen van de maand creëren en aan de container Div van de Date Picker hangen.
+// Het aanvullen met een Div voor iedere dag in functie van de referentiedatum gebeurt in een andere Udf.
+myDiv = document.createElement ("div");
+myDiv.id = "DaysBox";
+myDiv.style.clear = "both";
+myDiv.style.display = "table";
+myDiv.style.borderBottom = "1px solid Grey";
+myConDiv.appendChild (myDiv);
+
+document.body.appendChild(myConDiv);
+
+}  // End of CreateEmptyDatePicker().
+
+
+/***
+* Deze Udf actualiseert de DatePicker aan de hand van de referentiedatum.
+*/
+function UpdateDatepicker(){
+var myDiv, myElement, numDays, i, n
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+// De container Div voor de dagen van de maand heeft "DaysBox" als id.
+myDiv = document.getElementById ("DaysBox")
+
+// Eerst de container Div leegmaken want er kunnen nog dagen in staan.
+while (myDiv.firstChild) { myDiv.removeChild(myDiv.firstChild); }
+
+// Referentiemaand opzoeken en tonen.
+document.getElementById ("MonthBox").innerHTML = monthNames[refDate.getMonth()]+"  "+ refDate.getFullYear ()
+
+// Opzoeken op welke plaats de eerste dag van de maand staat in de array met de dagnamen.
+// Tot aan deze positie creëren we lege Divs, zodat de eerste dag van de maand op de juiste plaats getoond wordt.
+refDate.setDate(1)
+n = dayNames.indexOf (refDate.toDateString ().substr(0,3))
+for ( i=0; i < n; i++) {
+    myElement = CreateDateBox( 0 );
+    myDiv.appendChild (myElement);
+}
+
+// Dan de resterende Divs creëren om alle dagen van de referentiemaand te tonen. Het aantal kennen we niet, dat
+// moeten we bepalen aan de hand van het Date object, met de functie GetNumDays().
+numDays = GetNumDays();
+for ( i=1; i <= numDays; i++) {
+    myElement = CreateDateBox( i );
+    myDiv.appendChild (myElement);
+}
+
+UpdateTodaysBoxColors()
+
+}  // End of UpdateDatepicker().
+
+
+/***
+* Deze Udf geeft een Div voor één dag van de maand.
+* De vakjes waar geen cijfer in getoond wordt, creëren we op dezelfde manier zodat de afmetingen en uitlijning hetzelfde
+* blijven, maar we geven ze dezelfde voor- en achtergrondkleur als de DatePickerBox, zodat ze onzichtbaar worden.
+*/
+function CreateDateBox( nDay ){
+var myBox = document.createElement ("div");
+myBox.className = "DayBox";
+myBox.style.styleFloat = "left";
+myBox.style.cssFloat = "left";
+myBox.style.width = "28px";
+myBox.style.textAlign = "center";
+myBox.innerHTML =nDay;
+myBox.style.border = "1px solid Grey";
+myBox.style.margin= "2px";
+
+if(nDay == 0) {
+    myBox.style.border = "1px solid AliceBlue";
+    myBox.style.color = "AliceBlue";
+}
+
+else {
+    myBox.style.backgroundColor = "Lavender";
+    myBox.style.border = "1px solid Grey";
+    myBox.addEventListener ("mouseover", MouseOverDate, false);
+    myBox.addEventListener ("mouseout", MouseOutDate, false);
+    myBox.addEventListener ("click", OnDateClick, false);
+}
+
+return myBox
+}
+
+
+/***
+* Deze Udf geeft het vakje met de dag van vandaag een aangepaste kleur.
+*/
+function UpdateTodaysBoxColors(){
+var myToday , myBoxes, i
+
+// Nieuw Date object voor de dag van vandaag.
+myToday = new Date();
+
+// Als de getoonde maand niet de huidige maand is, is het gedaan.
+if ( myToday.getMonth() !== refDate.getMonth() ){return;}
+
+// De vakjes met de dagen van de maand zetten we in een array.
+myBoxes = document.getElementsByClassName("DayBox");
+
+// Het vakje met de dag van vandaag geven we een ander kleurtje?
+i=0
+while (myBoxes[i].innerHTML != myToday.getDate().toString()) { i++ }
+myBoxes[i].style.backgroundColor = "Khaki";
+}
+
+
+function GetNumDays(){
+return new Date( refDate.getFullYear()  ,  refDate.getMonth()+1   , 0).getDate();
+}
+
+function MouseOverNextOrPrevious(){
+this.style.color = "DarkRed";
+this.style.backgroundColor = "LemonChiffon";
+this.style.cursor = "pointer";
+}
+
+function MouseOutNextOrPrevious(){
+this.style.color = "White";
+this.style.backgroundColor = "Green";
+}
+
+function OnNextClick(){
+refDate.setMonth(refDate.getMonth()+1);
+UpdateDatepicker();
+}
+
+function OnPreviousClick(){
+refDate.setMonth(refDate.getMonth()-1);
+UpdateDatepicker();
+}
+
+function OnCloseClick(){
+RemoveDatePicker()
+}
+
+function MouseOverDate(){
+this.style.backgroundColor = "LemonChiffon";
+this.style.cursor = "pointer";
+}
+
+function MouseOutDate(){
+this.style.backgroundColor = "Lavender";
+UpdateTodaysBoxColors()
+}
+
+function OnDateClick(){
+var myMonth, myDay, myString;
+myMonth = (refDate.getMonth()+1).toString();
+if(myMonth.length == 1){myMonth = "0" + myMonth}
+myDay = this.innerHTML;
+if(myDay.length == 1){myDay = "0" + myDay}
+myString = refDate.getFullYear() + myMonth + myDay;
+setData( myString ) ;
+RemoveDatePicker();}
+
+function RemoveDatePicker(){
+var myDatePicker = document.getElementById ("DatePickerBox");
+myDatePicker.parentNode.removeChild (myDatePicker);
+}
+
+
+</script>
+</html>
